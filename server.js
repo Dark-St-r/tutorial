@@ -13,7 +13,7 @@ const init = async () => {
     });
 
     // Add the route
-    server.route({
+    server.route([{
         method: 'GET',
         path: '/',
         handler: (request, h) => {
@@ -21,7 +21,36 @@ const init = async () => {
             //return 'Hello World!';
             return "<h1>Hello World!</h1>";
         }
-    });
+    },{
+        method: 'GET',
+        path: '/users/{user?}',
+        handler: (request, h) => {
+            if (request.params.user) {
+                return `<h1>Hello ${request.params.user}</h1>`;
+            } else {
+                return `<h1>Hello Stranger!</h1>`;
+            }
+        }
+    },{
+        method: 'GET',
+        path: '/search/{search?}',
+        handler: (request, h) => {
+            return `<h1>You searched for ${request.query.name} ${request.query.lastname}</h1>`;
+        }
+    },{
+        method: 'GET',
+        path: '/home',
+        handler: (request, h) => {
+            return h.redirect('/');
+        }
+    },{
+        method: 'GET',
+        path: '/{any*}',
+        handler: (request, h) => {
+            return `<h1>404 Error! Page Not Found!</h1>`;
+        }
+    },
+]);
 
     // Start the server
     await server.start();
